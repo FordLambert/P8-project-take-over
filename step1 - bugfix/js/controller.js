@@ -120,16 +120,17 @@
 	 */
 	Controller.prototype.editItemSave = function (id, title) {
 		var self = this;
+		var titleLength = title.length;
 
 		while (title[0] === " ") {
 			title = title.slice(1);
 		}
 
-		while (title[title.length-1] === " ") {
+		while (title[titleLength - 1] === " ") {
 			title = title.slice(0, -1);
 		}
 
-		if (title.length !== 0) {
+		if (titleLength !== 0) {
 			self.model.update(id, {title: title}, function () {
 				self.view.render('editItemDone', {id: id, title: title});
 			});

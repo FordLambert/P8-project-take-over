@@ -13,6 +13,7 @@
 
 	/*----- Constructor -----*/
 	function Store(name, callback) {
+
 		callback = callback || function () {};
 
 		this._dbName = name;
@@ -51,13 +52,13 @@
 
 		var todos = JSON.parse(localStorage[this._dbName]).todos; //-- return a associative array of todos 
 
-		callback.call(this, todos.filter(function (todo) { // -- useless loop removed, we are already looping with .filter()
-			if (query.id !== todo.id) {
-				return false;
-				
-			} else {
-				return true;
+		callback.call(this, todos.filter(function (todo) {
+			for (var key in query) {
+				if (query[key] !== todo[key]) {
+					return false;
+				}
 			}
+			return true;
 		}));
 	};
 
@@ -116,7 +117,7 @@
 		if (id) {
 			var todosLength = todos.length
 
-			for (var i = 0; i < todos.length; i++) {
+			for (var i = 0; i < todosLength; i++) {
 				if (todos[i].id === id) {
 					for (var key in updateData) {
 						todos[i][key] = updateData[key];
@@ -150,7 +151,9 @@
 	Store.prototype.remove = function (id, callback) {
 		var data = JSON.parse(localStorage[this._dbName]);
 		var todos = data.todos;
-		var todoId;
+		var todosLength = todos.length;
+
+		//var todoId;
 		
 		/*-- useless loop --
 		for (var i = 0; i < todos.length; i++) {
@@ -160,7 +163,7 @@
 		}
 		*/
 
-		for (var i = 0; i < todos.length; i++) {
+		for (var i = 0; i < todosLength; i++) {
 			if (todos[i].id == id) {
 				todos.splice(i, 1);
 			}
