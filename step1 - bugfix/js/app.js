@@ -1,11 +1,14 @@
 /*global app, $on */
+
+/*----- last created, immediatly "launch" and start everything -----*/
+
 (function () {
 	'use strict';
 
 	/**
 	 * Sets up a brand new Todo list.
 	 *
-	 * @param {string} name The name of your new to do list.
+	 * @param {string} name The name of your new to do list. -- the param is here to say that paramater "name" must be a string" --
 	 */
 	function Todo(name) {
 		this.storage = new app.Store(name);

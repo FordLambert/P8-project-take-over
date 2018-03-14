@@ -57,11 +57,13 @@
 	 *	completed: 0,
 	 * });
 	 */
+
+	//-- called whenever refreshing or creating a new todo
 	Template.prototype.show = function (data) {
-		var i, l;
+		var dataLength = data.length;
 		var view = '';
 
-		for (i = 0, l = data.length; i < l; i++) {
+		for (var i = 0; i < dataLength; i++) { /*----- variables changed -----*/
 			var template = this.defaultTemplate;
 			var completed = '';
 			var checked = '';

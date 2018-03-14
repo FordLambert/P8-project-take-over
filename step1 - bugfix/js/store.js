@@ -10,6 +10,8 @@
 	 * @param {function} callback Our fake DB uses callbacks because in
 	 * real life you probably would be making AJAX calls
 	 */
+
+	/*----- Constructor -----*/
 	function Store(name, callback) {
 		callback = callback || function () {};
 
@@ -25,6 +27,7 @@
 
 		callback.call(this, JSON.parse(localStorage[name]));
 	}
+	/*----- -----*/
 
 	/**
 	 * Finds items based on a query given as a JS object
@@ -39,20 +42,22 @@
 	 *	 // hello: world in their properties
 	 * });
 	 */
+
+	//called only when editing a todo's title, render methods called as callback
 	Store.prototype.find = function (query, callback) {
 		if (!callback) {
 			return;
 		}
 
-		var todos = JSON.parse(localStorage[this._dbName]).todos;
+		var todos = JSON.parse(localStorage[this._dbName]).todos; //-- return a associative array of todos 
 
-		callback.call(this, todos.filter(function (todo) {
-			for (var q in query) {
-				if (query[q] !== todo[q]) {
-					return false;
-				}
+		callback.call(this, todos.filter(function (todo) { // -- useless loop removed, we are already looping with .filter()
+			if (query.id !== todo.id) {
+				return false;
+				
+			} else {
+				return true;
 			}
-			return true;
 		}));
 	};
 
@@ -65,6 +70,20 @@
 		callback = callback || function () {};
 		callback.call(this, JSON.parse(localStorage[this._dbName]).todos);
 	};
+
+	//-- added for making two identicals ids impossible
+	Store.prototype.createRandomId = function(todosList) {
+		var randomId = Math.floor(Math.random() * 1000);
+		var todosLength = todosList.length;
+
+		for (var i = 0; i < todosLength; i++) {
+			if (randomId == todosList[i].id) {
+				this.createRandomId(todosList);
+			}
+		}
+
+		return randomId;
+	}
 
 	/**
 	 * Will save the given data to the DB. If no item exists it will create a new
@@ -80,16 +99,23 @@
 
 		callback = callback || function () {};
 
+		/*
 		// Generate an ID
 	    var newId = ""; 
 	    var charset = "0123456789";
 
         for (var i = 0; i < 6; i++) {
-     		newId += charset.charAt(Math.floor(Math.random() * charset.length));
+     		newId += charset.charAt(Math.floor(Math.random() * charset.length)); //VERY unlikely BUT plausible -> two ids can be identical 
 		}
+		*/
+
+		var newId = this.createRandomId(todos);
 
 		// If an ID was actually given, find the item and update each property
+		//-- happen in case of editing a todo --
 		if (id) {
+			var todosLength = todos.length
+
 			for (var i = 0; i < todos.length; i++) {
 				if (todos[i].id === id) {
 					for (var key in updateData) {
@@ -101,6 +127,8 @@
 
 			localStorage[this._dbName] = JSON.stringify(data);
 			callback.call(this, todos);
+		
+		//happen when creating a todo
 		} else {
 
     		// Assign an ID
@@ -124,14 +152,16 @@
 		var todos = data.todos;
 		var todoId;
 		
+		/*-- useless loop --
 		for (var i = 0; i < todos.length; i++) {
 			if (todos[i].id == id) {
 				todoId = todos[i].id;
 			}
 		}
+		*/
 
 		for (var i = 0; i < todos.length; i++) {
-			if (todos[i].id == todoId) {
+			if (todos[i].id == id) {
 				todos.splice(i, 1);
 			}
 		}

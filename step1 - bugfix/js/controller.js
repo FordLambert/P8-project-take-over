@@ -162,11 +162,13 @@
 			items = data;
 		});
 
+		/* ----- Not necessary -----
 		items.forEach(function(item) {
 			if (item.id === id) {
 				console.log("Element with ID: " + id + " has been removed.");
 			}
 		});
+		*/
 
 		self.model.remove(id, function () {
 			self.view.render('removeItem', id);
