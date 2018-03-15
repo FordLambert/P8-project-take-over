@@ -41,9 +41,6 @@
 	};
 
 	View.prototype._setFilter = function (currentPage) {
-
-		console.log(currentPage);
-
 		qs('.filters .selected').className = '';
 		qs('.filters [href="#/' + currentPage + '"]').className = 'selected';
 	};
@@ -96,7 +93,6 @@
 	};
 
 	View.prototype.render = function (viewCmd, parameter) {
-
 		var self = this;
 		var viewCommands = {
 			showEntries: function () {
@@ -175,6 +171,7 @@
 	};
 
 	View.prototype.bind = function (event, handler) {
+
 		var self = this;
 		if (event === 'newTodo') {
 			$on(self.$newTodo, 'change', function () {

@@ -199,16 +199,56 @@ describe('controller', function () {
 	describe('toggle all', function () {
 		it('should toggle all todos to completed', function () {
 			// TODO: write test
+
+			//-- creating two todos for multiple "completed" test
+			var todos = [{id: 42, title: 'my first todo', completed: false}, {id: 43, title: 'my second todo', completed: false}];
+			setUpModel(todos);
+
+			//-- setting the view on main page
+			subject.setView('');
+
+			//-- if we click on the "complete all task" button
+			view.trigger('toggleAll', {completed: true});
+
+			//-- we expecteach of the todos to updates with their "completed" attributes to be changed to "true"
+			expect(model.update).toHaveBeenCalledWith(42, {completed: true}, jasmine.any(Function));
+			expect(model.update).toHaveBeenCalledWith(43, {completed: true}, jasmine.any(Function));
 		});
 
 		it('should update the view', function () {
 			// TODO: write test
+			
+			//-- creating two todos for multiple "completed" test
+			var todos = [{id: 42, title: 'my first todo', completed: false}, {id: 43, title: 'my second todo', completed: false}];
+			setUpModel(todos);
+
+			//-- setting the view on main page
+			subject.setView('');
+
+			//-- if we click on the "complete all task" button
+			view.trigger('toggleAll', {completed: true});
+
+			//-- we expect the todo's "completed" attribute to be "true"
+			expect(view.render).toHaveBeenCalledWith('elementComplete', {id: 42, completed: true});
+			expect(view.render).toHaveBeenCalledWith('elementComplete', {id: 43, completed: true});
 		});
 	});
 
 	describe('new todo', function () {
 		it('should add a new todo to the model', function () {
 			// TODO: write test
+
+			//-- setting the view on main page
+			subject.setView('');
+
+			//-- if we create a new todo in our input
+			view.trigger('newTodo', 'a new todo');
+
+			//-- We expect the model to create a new todo with the inout value as title
+			expect(model.create).toHaveBeenCalledWith(
+				'a new todo',
+				jasmine.any(Function)
+			);
 		});
 
 		it('should add a new todo to the view', function () {
