@@ -62,17 +62,15 @@ describe('controller', function () {
 	it('should show entries on start-up', function () {
 		// TODO: write test
 
-		//-----
-		// Initiate the model with an empty todo
+		//--define a fake todo to be the model
         var todo = {};
         setUpModel([todo]);
 
-		subject.setView('');
+		//--If we tell the controller to set the view without options (completed, active)
+		subject.setView('#/');
 
-        // 'showEntries' should be called
+        //--We expect the view to call "render" with the "showEntries" paramaters for displaying todos
 		expect(view.render).toHaveBeenCalledWith('showEntries', [todo]);
-		//-----
-
 	});
 
 	describe('routing', function () {
@@ -97,10 +95,42 @@ describe('controller', function () {
 
 		it('should show active entries', function () {
 			// TODO: write test
+
+			//--Create a fake todo to be the model and set it to be active
+            var todo = {title: 'my todo', active: true};
+			setUpModel([todo]);
+			
+			//--If we tell the controller to set the view with the 'active' option
+			subject.setView('#/active');
+            
+            //-- We expect the model to call "read" with "completed: false" parameter to go fetch uncompleted todos in db
+			expect(model.read).
+			    toHaveBeenCalledWith({
+				    completed: false
+				}, jasmine.any(Function)); //--we expect a function as second parameters (callback)
+            
+            //--We expect the view to call "render" with the "showEntries" paramaters for displaying todos
+			expect(view.render).toHaveBeenCalledWith('showEntries', [todo]);
 		});
 
 		it('should show completed entries', function () {
 			// TODO: write test
+
+			//--Create a fake todo to be the model and set it to be completed
+            var todo = {title: 'my todo', completed: true};
+			setUpModel([todo]);
+			
+			//--If we tell the controller to set the view with the "completed" option
+			subject.setView('#/completed');
+            
+            //-- We expect the model to call "read" with "completed: true" parameter to go fetch completed todos in db
+			expect(model.read).
+			    toHaveBeenCalledWith({
+				    completed: true
+				}, jasmine.any(Function)); //--we expect a function as second parameters (callback)
+            
+            //--We expect the view to call "render" with the "showEntries" paramaters for displaying todos
+			expect(view.render).toHaveBeenCalledWith('showEntries', [todo]);
 		});
 	});
 
@@ -207,6 +237,21 @@ describe('controller', function () {
 	describe('element removal', function () {
 		it('should remove an entry from the model', function () {
 			// TODO: write test
+
+			//-- Create a fake todo to be the model with fake data and set it to be completed
+			var todo = {id: 42, title: 'my todo', completed: true};
+			setUpModel([todo]);
+
+			subject.setView('');
+
+			//-- if we dispatch the "itemRemove" event (by clicking on the cross)
+			view.trigger('itemRemove', {id: 42});
+
+			//-- we expect the model with the id 42 to be removed from db
+			expect(model.remove).toHaveBeenCalledWith(
+				42,
+				jasmine.any(Function)
+			);
 		});
 
 		it('should remove an entry from the view', function () {
