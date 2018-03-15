@@ -52,6 +52,7 @@ describe('controller', function () {
 		};
 	};
 
+	//called before each "it("
 	beforeEach(function () {
 		model = jasmine.createSpyObj('model', ['read', 'getCount', 'remove', 'create', 'update']);
 		view = createViewStub();
@@ -60,6 +61,18 @@ describe('controller', function () {
 
 	it('should show entries on start-up', function () {
 		// TODO: write test
+
+		//-----
+		// Initiate the model with an empty todo
+        var todo = {};
+        setUpModel([todo]);
+
+		subject.setView('');
+
+        // 'showEntries' should be called
+		expect(view.render).toHaveBeenCalledWith('showEntries', [todo]);
+		//-----
+
 	});
 
 	describe('routing', function () {

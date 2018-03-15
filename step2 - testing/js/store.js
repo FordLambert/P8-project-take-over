@@ -151,8 +151,6 @@
 	Store.prototype.remove = function (id, callback) {
 		var data = JSON.parse(localStorage[this._dbName]);
 		var todos = data.todos;
-		var todosLength = todos.length;
-
 		//var todoId;
 		
 		/*-- useless loop --
@@ -163,7 +161,7 @@
 		}
 		*/
 
-		for (var i = 0; i < todosLength; i++) {
+		for (var i = 0; i < todos.length; i++) {
 			if (todos[i].id == id) {
 				todos.splice(i, 1);
 			}
