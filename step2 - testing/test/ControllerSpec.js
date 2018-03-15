@@ -178,10 +178,22 @@ describe('controller', function () {
 
 	it('should highlight "All" filter by default', function () {
 		// TODO: write test
+
+		//-- if we set the view with no parameters
+		subject.setView('');
+
+		//-- We expect the view to call setFilter with no parameters (empty string) for targeting the All button (with qs)
+		expect(view.render).toHaveBeenCalledWith('setFilter', '');
 	});
 
 	it('should highlight "Active" filter when switching to active view', function () {
 		// TODO: write test
+
+		//-- if we set the view with the active parameter
+		subject.setView('#/active');
+
+		//-- We expect the view to call setFilter with "active" parameters for targeting the Active button (with qs)
+		expect(view.render).toHaveBeenCalledWith('setFilter', 'active');
 	});
 
 	describe('toggle all', function () {

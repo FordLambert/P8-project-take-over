@@ -41,6 +41,9 @@
 	};
 
 	View.prototype._setFilter = function (currentPage) {
+
+		console.log(currentPage);
+
 		qs('.filters .selected').className = '';
 		qs('.filters [href="#/' + currentPage + '"]').className = 'selected';
 	};
