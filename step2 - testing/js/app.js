@@ -21,6 +21,7 @@
 	var todo = new Todo('todos-vanillajs');
 
 	function setView() {
+		debugger
 		todo.controller.setView(document.location.hash);
 	}
 	$on(window, 'load', setView);
